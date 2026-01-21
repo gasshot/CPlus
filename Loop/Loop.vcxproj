@@ -123,11 +123,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="DrawingStars.cpp" />
     <ClCompile Include="Loop.cpp" />
     <ClCompile Include="NestedLoop.cpp" />
+    <ClCompile Include="UsingLoopForSum.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DrawingStars.h" />
     <ClInclude Include="NestedLoop.h" />
+    <ClInclude Include="UsingLoopForSum.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -21,9 +21,21 @@
     <ClCompile Include="NestedLoop.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="DrawingStars.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="UsingLoopForSum.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="NestedLoop.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawingStars.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="UsingLoopForSum.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
   </ItemGroup>
