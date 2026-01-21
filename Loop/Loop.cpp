@@ -8,6 +8,7 @@ int main()
 {
 	//drawingStars(8);
 	//reverseDrawingStars();
-	drawingTriangle();
+	//drawingTriangle();
+	reverseDrawingTriangle();
 	return 0;
 }
