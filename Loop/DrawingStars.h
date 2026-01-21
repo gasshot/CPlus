@@ -1,3 +1,7 @@
 #pragma once
 
-void DrawingStars(int a);
+void drawingStars(int a);
+
+void reverseDrawingStars();
+
+void drawingTriangle();
