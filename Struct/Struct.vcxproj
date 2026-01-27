@@ -125,6 +125,9 @@
   <ItemGroup>
     <ClCompile Include="Struct.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Struct.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
