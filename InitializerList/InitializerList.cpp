@@ -1,6 +1,8 @@
 ﻿#include <iostream>
 
 class Marine {
+	static int total_marine_num; // 생성된 마린의 총 수
+
     int hp;
 	int coord_x, coord_y;
 
@@ -13,16 +15,19 @@ public:
 	Marine(int x, int y, int default_damage); // x, y 좌표에 마린 생성
 
 	int attack(); // 공격
-	void be_attacked(int damage_earn); // 공격 당함
+	Marine& be_attacked(int damage_earn); // 공격 당함
 	void move(int x, int y); // 위치 이동
 
 	void show_status(); // 상태 출력
+	~Marine() { Marine::total_marine_num--; } // 소멸자
 };
 
+int Marine::total_marine_num = 0; // static 멤버 변수 초기화
+
 // 초기화 리스트 (initializer list) 라고 부르며, 생성자 호출과 동시에 멤버 변수들을 초기화
-Marine::Marine() : hp(50), coord_x(0), coord_y(0), default_damage(5), is_dead(false) {}
-Marine::Marine(int x, int y) : hp(50), coord_x(x), coord_y(y), default_damage(5), is_dead(false) {}
-Marine::Marine(int x, int y, int default_damage) : hp(50), coord_x(x), coord_y(y), default_damage(default_damage), is_dead(false) {}
+Marine::Marine() : hp(50), coord_x(0), coord_y(0), default_damage(5), is_dead(false) { total_marine_num++; }
+Marine::Marine(int x, int y) : hp(50), coord_x(x), coord_y(y), default_damage(5), is_dead(false) { total_marine_num++; }
+Marine::Marine(int x, int y, int default_damage) : hp(50), coord_x(x), coord_y(y), default_damage(default_damage), is_dead(false) { total_marine_num++; }
 
 void Marine::move(int x, int y) {
 	coord_x = x;
@@ -33,31 +38,38 @@ int Marine::attack() {
 	return default_damage;
 }
 
-void Marine::be_attacked(int damage_earn) {
+Marine& Marine::be_attacked(int damage_earn) {
 	hp -= damage_earn;
 	if (hp <= 0) {
 		is_dead = true;
 	}
+	return *this;
 }
 
 void Marine::show_status() {
 	std::cout << " *** Marine *** " << std::endl;
 	std::cout << " Location : (" << coord_x << ", " << coord_y << ")" << std::endl;
 	std::cout << " HP : " << hp << std::endl;
+	std::cout << "현재 총 마린 수 : " << total_marine_num << std::endl;
 }
 
+void create_marine() {
+	Marine marine3(10, 10, 4);
+	marine3.show_status();
+}
 
 int main()
 {
-	Marine marine1(2, 3, 10);
+	Marine marine1(2, 3, 5);
 	Marine marine2(3, 5, 10);
 
 	marine1.show_status();
 	marine2.show_status();
 
+	create_marine();
 
 	std::cout << std::endl << "마린 1이 마린 2를 공격!" << std::endl;
-	marine2.be_attacked(marine1.attack());
+	marine2.be_attacked(marine1.attack()).be_attacked(marine1.attack());
 
 	marine1.show_status();
 	marine2.show_status();
