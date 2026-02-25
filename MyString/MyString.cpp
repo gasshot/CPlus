@@ -14,7 +14,7 @@ public:
     void showText();
     int showLength();
     char* append(char* second);
-    char* assign(char* replace);
+    MyString& assign(const char* replace);
     ~MyString();
 };
 MyString::MyString() {
@@ -217,15 +217,24 @@ char* MyString::append(char* second) {
     return text;
 }
 
-char* MyString::assign(char* replace) {
+// 매개변수를 const로 변경하고, 반환형을 MyString&로 변경 (선택 사항)
+MyString& MyString::assign(const char* replace) {
+    // 1. 널 포인터 방어
+    if (replace == nullptr) {
+        return *this; // 또는 빈 문자열 처리
+    }
 
+    // 2. 자기 자신 대입 방지 (입력받은 주소가 내 text 주소와 같다면 복사할 필요 없음)
+    if (this->text == replace) {
+        return *this;
+    }
+
+    // 길이 계산
     int count = 0;
-    char* check = replace;
+    const char* check = replace;
 
-    while (1)
-    {
-        if (*check == '\0')
-        {
+    while (true) {
+        if (*check == '\0') {
             count++;
             break;
         }
@@ -233,20 +242,21 @@ char* MyString::assign(char* replace) {
         count++;
     }
 
+    // 3. 용량 확인 및 재할당 로직 (작성하신 훌륭한 로직 그대로 유지)
     if (count > capacity) {
         delete[] text;
         text = nullptr;
         text = new char[count];
-        capacity = count;
+        capacity = count; // 용량 갱신
     }
 
-    for (int i = 0; i < count; i++)
-    {
+    // 4. 데이터 복사
+    for (int i = 0; i < count; i++) {
         *(text + i) = *(replace + i);
     }
 
-    return text;
-}
+    // 메소드 체이닝을 위해 자기 자신(*this)을 참조로 반환
+    return *this;
 
 int main()
 {
