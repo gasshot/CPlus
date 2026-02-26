@@ -9,11 +9,13 @@ public:
     MyString();
     MyString(char one);
     MyString(const char* str);
-    MyString(const MyString& ms);
+    MyString(const MyString& target);
     char* returnText();
     void showText();
     int showLength();
     char* append(char* second);
+    bool compare(const char* target);
+    bool operator==(const char* target);
     MyString& assign(const char* replace);
     ~MyString();
 };
@@ -72,10 +74,10 @@ MyString::MyString(const char* str) {
     }
 }
 
-MyString::MyString(const MyString& ms) {
+MyString::MyString(const MyString& target) {
 
     // 널 포인터가 들어올 경우 빈 문자열로 처리
-    if (ms.text == nullptr) {
+    if (target.text == nullptr) {
         text = new char[1];
         text[0] = '\0';
         capacity = 1;
@@ -83,7 +85,7 @@ MyString::MyString(const MyString& ms) {
     }
 
     int count = 0;
-    const char* check = ms.text;
+    const char* check = target.text;
 
     // 길이 계산 (널 문자 포함)
     while (true) {
@@ -98,11 +100,10 @@ MyString::MyString(const MyString& ms) {
     // 메모리 할당 및 복사
     text = new char[count];
     capacity = count;
-    const char* firstAddress = ms.text;
+    const char* firstAddress = target.text;
 
     for (int i = 0; i < count; i++) {
-        *(text + i) = *firstAddress;
-        firstAddress++;
+        *(text + i) = *(firstAddress + i);
     }
 }
 
@@ -257,18 +258,76 @@ MyString& MyString::assign(const char* replace) {
 
     // 메소드 체이닝을 위해 자기 자신(*this)을 참조로 반환
     return *this;
+}
+
+bool MyString::compare(const char* target){
+    // 1. 널 포인터 방어
+    if (target == nullptr) {
+        return false;
+    }
+
+    // 2. 주소 비교 (동일한 메모리면 당연히 내용도 같음)
+    if (this->text == target) {
+        return true;
+    }
+
+    int i = 0;
+
+    // 3. 두 문자열 중 하나라도 끝('\0')에 도달하기 전까지 반복
+    while (*(text + i) != '\0' && *(target + i) != '\0') {
+        if (*(text + i) != *(target + i)) {
+            return false; // 중간에 다른 글자가 발견되면 즉시 false 반환
+        }
+        i++;
+    }
+
+    // 4. 루프 종료 후 길이 확인
+    // 여기까지 왔다면 도중에 글자가 달라서 종료된 것은 아님.
+    // 두 문자열이 동시에 '\0'을 가리키고 있어야만 길이까지 완벽히 똑같은 것!
+    return (*(text + i) == '\0' && *(target + i) == '\0');
+}
+bool MyString::operator==(const char* target) {
+
+    // 1. 널 포인터 방어
+    if (target == nullptr) {
+        return false;
+    }
+
+    // 2. 주소 비교 (동일한 메모리면 당연히 내용도 같음)
+    if (this->text == target) {
+        return true;
+    }
+
+    int i = 0;
+
+    // 3. 두 문자열 중 하나라도 끝('\0')에 도달하기 전까지 반복
+    while (*(text + i) != '\0' && *(target + i) != '\0') {
+        if (*(text + i) != *(target + i)) {
+            return false; // 중간에 다른 글자가 발견되면 즉시 false 반환
+        }
+        i++;
+    }
+
+    // 4. 루프 종료 후 길이 확인
+    // 여기까지 왔다면 도중에 글자가 달라서 종료된 것은 아님.
+    // 두 문자열이 동시에 '\0'을 가리키고 있어야만 길이까지 완벽히 똑같은 것!
+    return (*(text + i) == '\0' && *(target + i) == '\0');
+}
 
 int main()
 {
     char test1[] = "Hello";
     char test2[] = "World!";
     char test3[] = "short";
-
+    char test4[] = "Hello";
 
     MyString ms1(test1);
     MyString ms2(test2);
+    MyString ms4(test4);
 
    ms1.showLength();
+   std::cout <<  ms4.returnText() << "와 " << (ms1.compare(ms4.returnText()) ? "같음" : "다름") << std::endl;
+
 
    ms1.append(ms2.returnText());
    ms1.showText();
