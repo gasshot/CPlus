@@ -87,28 +87,27 @@ void Complex::operator+(const char* str) {
 
         int pointPos = -1;
 
-        for (int i = 0; i < length; i++)
-        {
-            if (*(str + i) == '.')
-            {
+        for (int i = 0; i < length; i++) {
+            if (*(str + i) == '.') {
                 pos = pointPos;
                 break;
             }
         }
 
-        if (pointPos == -1) // 정수다(예 53689)
-        {
+        if (pointPos == -1) { // 정수다(예 53689)
             std::cout << "정수 : true" << std::endl;
             for (int j = 0; j < length - 1; j++)
             {
                 int temp = (int)(*(str + j)) - '0';
-                std::cout << length - 1 - (j + 1) << "자리 값 : " << temp << std::endl;
+                std::cout << "10의 " << length - 1 - (j + 1) << "승 : " << temp << std::endl;
                 
                 // j = 0일 때
-                sum += temp * pow(10, length - 1 - (j + 1));
+                sum += temp * (int)pow(10, length - 1 - (j + 1));
             }
         }
+        else {
         
+        }
     }
 
     std::cout << "테스트 : " << sum << std::endl;
