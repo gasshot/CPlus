@@ -105,7 +105,8 @@ void Complex::operator+(const char* str) {
                 sum += temp * (int)pow(10, length - 1 - (j + 1));
             }
         }
-        else {
+        else { // 소수점이 있다.
+
         
         }
     }
