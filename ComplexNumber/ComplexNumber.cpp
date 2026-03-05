@@ -1,4 +1,6 @@
 ﻿#include <iostream>
+#include <cmath>
+#include <iomanip> // 출력 정밀도 확인용
 
 class Complex {
 private:
@@ -50,72 +52,51 @@ Complex& Complex::operator=(const Complex& c) {
 }
 
 void Complex::operator+(const char* str) {
+    // 1. 순수 문자열 길이 구하기 (널 문자 제외)
     int length = 0;
-    const char* firstAdress = str;
-    while (1) {
-    
-        if (*firstAdress == '\0') 
-        {
-            length++;
-            break;
-        }
+    while (str[length] != '\0') {
         length++;
-        firstAdress++; 
     }
-    // 2-3i\0
-    // 0123 4
 
-    // 3i
-    // 01
-    std::cout << "길이 : " << length << std::endl;
-    int pos = -1;
-
+    // 2. 소수점('.') 위치 찾기
+    int pointPos = -1;
     for (int i = 0; i < length; i++) {
-        
-        if (*(str + i) == 'i') 
-        {
-            pos = i;
+        if (str[i] == '.') {
+            pointPos = i;
             break;
         }
     }
-    
-    
-    int sum = 0;
-    // 허수부분이 없습니다.
-    if (pos == -1) {
-        std::cout << "실수만 존재 : true" << std::endl;
 
-        int pointPos = -1;
+    double sum = 0;
 
+    // 3. 실수 파싱 로직
+    if (pointPos == -1) {
+        // Case A: 정수만 있는 경우 (예: "536")
         for (int i = 0; i < length; i++) {
-            if (*(str + i) == '.') {
-                pos = pointPos;
-                break;
-            }
+            sum = sum * 10 + (str[i] - '0');
+        }
+    }
+    else {
+        // Case B: 소수점이 있는 경우 (예: "53.689")
+
+        // 정수부 계산 (소수점 이전까지)
+        for (int i = 0; i < pointPos; i++) {
+            sum = sum * 10 + (str[i] - '0');
         }
 
-        if (pointPos == -1) { // 정수다(예 53689)
-            std::cout << "정수 : true" << std::endl;
-            for (int j = 0; j < length - 1; j++)
-            {
-                int temp = (int)(*(str + j)) - '0';
-                std::cout << "10의 " << length - 1 - (j + 1) << "승 : " << temp << std::endl;
-                
-                // j = 0일 때
-                sum += temp * (int)pow(10, length - 1 - (j + 1));
-            }
-        }
-        else { // 소수점이 있다.
-
-        
+        // 소수부 계산 (소수점 이후부터 끝까지)
+        double decimalWeight = 0.1;
+        for (int i = pointPos + 1; i < length; i++) {
+            sum += (str[i] - '0') * decimalWeight;
+            decimalWeight /= 10.0; // 자릿수가 넘어갈 때마다 0.1, 0.01... 로 감소
         }
     }
 
-    std::cout << "테스트 : " << sum << std::endl;
-
-    //Complex temp;
-    //return null;
+    // 4. 결과 출력 (정밀도를 높여서 확인)
+    std::cout << "입력 문자열: " << str << std::endl;
+    std::cout << "계산된 실수(sum): " << std::fixed << std::setprecision(10) << sum << std::endl;
 }
+
 
 int main() {
     Complex a(1.0, 2.0);
@@ -124,6 +105,6 @@ int main() {
     //c = a * b + a / b + a + b;
     //c.println();
 
-    a + "53689";
+    a + "536";
 }
 
