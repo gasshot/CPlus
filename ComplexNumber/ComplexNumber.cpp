@@ -20,7 +20,7 @@ public:
 
     void operator+(const char* str);
 
-    void println() { std::cout << "( " << real << " , " << img << " ) " << std::endl; }
+    void println() const { std::cout << "( " << real << " , " << img << " ) " << std::endl; }
 };
 
 Complex Complex::operator+(const Complex& c) const {

@@ -17,6 +17,7 @@ public:
     bool compare(const char* target);
     bool operator==(const char* target);
     MyString& assign(const char* replace);
+    char& operator[](int index); // 올바른 배열 연산자 오버로딩
     ~MyString();
 };
 MyString::MyString() {
@@ -126,12 +127,13 @@ void MyString::showText() {
 
         if (*check == '\0')
         {
-
+            std::cout << std::endl;
             return;
         }
         std::cout << *check;
         check++;
     }
+
 }
 
 int MyString::showLength() {
@@ -314,6 +316,15 @@ bool MyString::operator==(const char* target) {
     return (*(text + i) == '\0' && *(target + i) == '\0');
 }
 
+char& MyString::operator[](int index) {
+    // 인덱스 범위 체크 (간단하게 capacity 기준)
+    if (text == nullptr || index < 0 || index >= capacity - 1) {
+        static char dummy = '\0'; // 잘못된 접근 시 안전하게 반환
+        return dummy;
+    }
+    return text[index];
+}
+
 int main()
 {
     char test1[] = "Hello";
@@ -323,20 +334,27 @@ int main()
 
     MyString ms1(test1);
     MyString ms2(test2);
+    MyString ms3(test3);
     MyString ms4(test4);
-
-   ms1.showLength();
-   std::cout <<  ms4.returnText() << "와 " << (ms1.compare(ms4.returnText()) ? "같음" : "다름") << std::endl;
+    MyString str("ccccc");
 
 
-   ms1.append(ms2.returnText());
-   ms1.showText();
-   ms1.showLength();
+   //ms1.showLength();
+   //std::cout <<  ms4.returnText() << "와 " << (ms1.compare(ms4.returnText()) ? "같음" : "다름") << std::endl;
 
-   ms1.assign(test3);
 
-   ms1.showText();
-   ms1.showLength();
+   //ms1.append(ms2.returnText());
+   //ms1.showText();
+   //ms1.showLength();
+
+   //ms1.assign(test3);
+
+   //ms1.showText();
+   //ms1.showLength();
+
+    str.showText();
+    str[3] = 'A';
+    str.showText();
 
    return 0;
 }
